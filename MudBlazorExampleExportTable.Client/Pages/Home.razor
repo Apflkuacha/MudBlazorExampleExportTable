@@ -3,7 +3,8 @@
 
 <PageTitle>Home</PageTitle>
 
-<MudDataGrid Items="@Elements.Take(4)">
+<MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="ExportCSV">Export CSV</MudButton>
+<MudDataGrid @ref="grid" Items="@Elements.Take(4)">
     <Columns>
         <PropertyColumn Property="x => x.Number" Title="Nr" />
         <PropertyColumn Property="x => x.Sign" />
@@ -64,10 +65,19 @@
 
 @code {
     private IEnumerable<Element> Elements = new List<Element>();
+    private MudDataGrid<Element> grid = null!;
 
     protected override void OnInitialized()
     {
         Elements = new List<Element>() { new Element() { Name = "test1", Molar = 4, Group = "what", Position = 5 }, new Element() { Name = "test2", Molar = 8.5, Group = "what", Position = 45 } };
         base.OnInitialized();
+    }
+
+    private void ExportCSV()
+    {
+        var data = DataGridExporter.GetTableData(grid.RenderedColumns, grid.FilteredItems);
+        var fileContentAsByteArray = DataGridExporter.GenerateCSV(data); // or Exporter.GenerateExcel(data);
+
+        // TODO: save in file ...
     }
 }
