@@ -1,7 +1,17 @@
 ﻿@page "/"
+@using MudBlazorExampleExportTable.Client.Classes
 
 <PageTitle>Home</PageTitle>
 
+<MudDataGrid Items="@Elements.Take(4)">
+    <Columns>
+        <PropertyColumn Property="x => x.Number" Title="Nr" />
+        <PropertyColumn Property="x => x.Sign" />
+        <PropertyColumn Property="x => x.Name" />
+        <PropertyColumn Property="x => x.Position" />
+        <PropertyColumn Property="x => x.Molar" Title="Molar mass" />
+    </Columns>
+</MudDataGrid>
 
 <MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
 <MudText Class="mb-8">Welcome to your new app, powered by MudBlazor and the .NET 8 Template!</MudText>
@@ -52,3 +62,12 @@
     </MudLink>
 </MudText>
 
+@code {
+    private IEnumerable<Element> Elements = new List<Element>();
+
+    protected override void OnInitialized()
+    {
+        Elements = new List<Element>() { new Element() { Name = "test1", Molar = 4, Group = "what", Position = 5 }, new Element() { Name = "test2", Molar = 8.5, Group = "what", Position = 45 } };
+        base.OnInitialized();
+    }
+}
